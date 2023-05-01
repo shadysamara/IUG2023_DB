@@ -1,10 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SpHelper {
-  SpHelper._();
-  static SpHelper spHelper = SpHelper._();
-  late SharedPreferences sp;
-  initSp() async {
+
+  static late SharedPreferences sp;
+  static initSp() async {
     sp = await SharedPreferences.getInstance();
   }
 
@@ -24,13 +23,13 @@ class SpHelper {
     sp.remove('name');
   }
 
-  bool getFirstTime() {
-    bool x = sp.getBool("isFirstTime") ?? true;
-    sp.setBool("isFirstTime", false);
-    return x;
-  }
-
-  setFirstTime() {
-    sp.setBool("isFirstTime", false);
+  static bool getIsFirstTime() {
+    bool? isFirstTime = sp.getBool("isFirstTimeVP");
+    if (isFirstTime == null) {
+      sp.setBool("isFirstTimeVP", false);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

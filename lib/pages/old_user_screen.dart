@@ -7,7 +7,7 @@ class OldUserScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Text(
-          "Hello Old User",
+          "Old User",
           style: TextStyle(fontSize: 30),
         ),
       ),

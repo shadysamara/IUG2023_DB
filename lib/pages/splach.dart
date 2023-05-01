@@ -4,15 +4,14 @@ import 'package:iug_local_storage/pages/old_user_screen.dart';
 import 'package:iug_local_storage/sphelper.dart';
 
 class SplachScreen extends StatelessWidget {
-  NavigationFunction(BuildContext context) async{
-    await Future.delayed(Duration(seconds: 2));
-    bool isFirstTime = SpHelper.spHelper.getFirstTime();
-    if (isFirstTime) {
+  navigationFun(BuildContext context) async{
+    await Future.delayed(Duration(seconds: 3));
+    bool x = SpHelper.getIsFirstTime();
+    if (x) {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
         return NewUserScreen();
       }));
-    
     } else {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
@@ -23,11 +22,11 @@ class SplachScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NavigationFunction(context);
+    navigationFun(context);
     return Scaffold(
       body: Center(
         child: Text(
-          "Splach Screen",
+          "Splach",
           style: TextStyle(fontSize: 30),
         ),
       ),
