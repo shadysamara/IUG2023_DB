@@ -15,7 +15,7 @@ class SplachScreen extends StatelessWidget {
     } else {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return OldUserScreen();
+        return NewStudentScreen();
       }));
     }
   }
