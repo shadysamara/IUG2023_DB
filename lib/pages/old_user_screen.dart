@@ -27,7 +27,12 @@ class NewStudentScreen extends StatelessWidget {
                         gender: genderController.text);
                     DbHelper.insertNewStudent(student);
                   },
-                  child: const Text("Insert New Student"))
+                  child: const Text("Insert New Student")),
+              ElevatedButton(
+                  onPressed: () {
+                    DbHelper.getAllStudents();
+                  },
+                  child: const Text("Test Get Students"))
             ],
           ),
         ));

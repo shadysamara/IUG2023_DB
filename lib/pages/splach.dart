@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iug_local_storage/pages/all_students_page.dart';
 import 'package:iug_local_storage/pages/new_user_screen.dart';
 import 'package:iug_local_storage/pages/old_user_screen.dart';
 import 'package:iug_local_storage/sphelper.dart';
@@ -10,7 +11,7 @@ class SplachScreen extends StatelessWidget {
     if (x) {
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return NewUserScreen();
+        return AllStudentsScreen();
       }));
     } else {
       Navigator.of(context)

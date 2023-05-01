@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iug_local_storage/dbhelper.dart';
+import 'package:iug_local_storage/pages/all_students_page.dart';
 import 'package:iug_local_storage/pages/splach.dart';
 import 'package:iug_local_storage/sphelper.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: SplachScreen(),
+      home: AllStudentsScreen(),
     );
   }
 }

@@ -21,7 +21,14 @@ class DbHelper {
     log(rowIndex.toString());
   }
 
-  static getAllStudents() async {}
-  static deleteStudent() async {}
+  static Future<List<Map<String, dynamic>>> getAllStudents() async {
+    List<Map<String, dynamic>> results = await database.query('Students');
+    return results;
+  }
+
+  static deleteStudent(int id) async {
+    await database.delete('Students', where: "id=$id");
+  }
+
   static updateStudent() async {}
 }
