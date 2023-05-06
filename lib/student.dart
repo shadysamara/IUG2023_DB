@@ -1,13 +1,14 @@
 class Student {
   int? id;
   String? name;
-  String? gender;
-  int? gpa;
-  Student({this.id, this.name, this.gender, this.gpa});
+  bool? gender;
+  int? age;
+  Student({this.id, this.name, this.gender, this.age});
   toMap() {
-    return {"name": name,
-    "Gender":gender,
-    "Gpa":gpa
+    return {
+      "name":name,
+      "age":age,
+      "gender":gender
     };
   }
 }

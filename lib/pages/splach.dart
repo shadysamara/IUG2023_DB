@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:iug_local_storage/pages/all_students_page.dart';
-import 'package:iug_local_storage/pages/new_user_screen.dart';
-import 'package:iug_local_storage/pages/old_user_screen.dart';
-import 'package:iug_local_storage/sphelper.dart';
+import 'package:iug_local_storage/mvc/models/sphelper.dart';
+import 'package:iug_local_storage/pages/new_user.dart';
+import 'package:iug_local_storage/pages/old_user.dart';
 
-class SplachScreen extends StatelessWidget {
-  navigationFun(BuildContext context) async{
-    await Future.delayed(Duration(seconds: 3));
-    bool x = SpHelper.getIsFirstTime();
-    if (x) {
+class SplachScreen extends StatefulWidget {
+  @override
+  State<SplachScreen> createState() => _SplachScreenState();
+}
+
+class _SplachScreenState extends State<SplachScreen> {
+  navigationFun(BuildContext context) {
+  
+    bool result = SpHelper.checkFirstTime();
+    if (result) {
+      // navigate to new user
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return AllStudentsScreen();
+        return NewUserScreen();
       }));
     } else {
+      //navigate to old user
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return NewStudentScreen();
+        return OldUserScreen();
       }));
     }
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     navigationFun(context);
+  }
   @override
   Widget build(BuildContext context) {
-    navigationFun(context);
+   
     return Scaffold(
       body: Center(
         child: Text(
