@@ -1,76 +1,28 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:iug_local_storage/mvc/controllers/db_controller.dart';
 import 'package:iug_local_storage/mvc/models/db_helper.dart';
-import 'package:iug_local_storage/mvc/models/sphelper.dart';
-import 'package:iug_local_storage/mvc/views/db_screen.dart';
+import 'package:iug_local_storage/mvc/models/student.dart';
 import 'package:iug_local_storage/mvc/views/students_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SpHelper.initSp();
-  await DbHelper.dbHelper.initDatabase();
-  runApp(MyApp());
+
+  await DbHelper.dbHelper.initDb();
+  runApp(MaterialApp(home: StudentsScreen()));
 }
 
-class MyApp extends StatefulWidget {
+class SpTestScreen extends StatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<SpTestScreen> createState() => _SpTestScreenState();
 }
 
-class _MyAppState extends State<MyApp> {
-  bool isDark = false;
+class _SpTestScreenState extends State<SpTestScreen> {
+  TextEditingController nameController = TextEditingController();
 
-  changeIsDarkMode() {
-    isDark = !isDark;
-    SpHelper.saveIsDark(isDark);
-    setState(() {});
-  }
+  TextEditingController gpaController = TextEditingController();
 
-  getDarkMode() {
-    isDark = SpHelper.getIsDark();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getDarkMode();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DbController>(
-      create: (context)=>DbController(),
-      child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: isDark ? ThemeData.dark() : ThemeData.light(),
-          home: StudentsScreen()
-          /*Scaffold(
-          appBar: AppBar(
-            actions: [
-              Switch(
-                  value: isDark,
-                  onChanged: (v) {
-                    changeIsDarkMode();
-                  })
-            ],
-          ),
-        ),*/
-          ),
-    );
-  }
-}
-
-class SpTestScreen extends StatelessWidget {
-  SpTestScreen() {
-    print("");
-  }
-  TextEditingController keyController = TextEditingController();
-  TextEditingController valueController = TextEditingController();
+  bool isMale = true;
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +34,9 @@ class SpTestScreen extends StatelessWidget {
         child: Column(
           children: [
             TextField(
-              controller: keyController,
+              controller: nameController,
               decoration: InputDecoration(
-                  labelText: "Enter the key",
+                  labelText: "Enter the Student name",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15))),
             ),
@@ -92,37 +44,48 @@ class SpTestScreen extends StatelessWidget {
               height: 20,
             ),
             TextField(
-              controller: valueController,
+              controller: gpaController,
               decoration: InputDecoration(
-                  labelText: "Enter the value",
+                  labelText: "Enter the Student GPA",
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15))),
             ),
             SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  String key = keyController.text;
-                  String value = valueController.text;
-                  SpHelper.createNewItem(key, value);
-                },
-                child: Text("Enter Item in SharePrefrnces")),
-            SizedBox(
-              height: 20,
+            Row(
+              children: [
+                Text("Gender: "),
+                Radio(
+                    value: true,
+                    groupValue: isMale,
+                    onChanged: (v) {
+                      isMale = true;
+                      setState(() {});
+                    }),
+                Text("Male"),
+                SizedBox(
+                  width: 20,
+                ),
+                Radio(
+                    value: false,
+                    groupValue: isMale,
+                    onChanged: (v) {
+                      isMale = false;
+                      setState(() {});
+                    }),
+                Text("FeMale"),
+              ],
             ),
             ElevatedButton(
                 onPressed: () {
-                  String key = keyController.text;
-                  String? result = SpHelper.getItem(key);
-                  if (result == null) {
-                    log("not found");
-                  } else {
-                    log(result);
-                  }
+                  Student student = Student(
+                      name: nameController.text,
+                      gpa: double.parse(gpaController.text),
+                      isMale: isMale);
+                  DbHelper.dbHelper.insertNewStudent(student);
                 },
-                child: Text("print the key value")),
-            ElevatedButton(onPressed: () {}, child: Text("delete the key"))
+                child: Text("Insert New Student")),
           ],
         ),
       ),

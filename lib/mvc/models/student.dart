@@ -2,28 +2,23 @@
 class Student {
   int? id;
   String? name;
-  bool? isMale;
   double? gpa;
+  late bool isMale;
   Student({
     this.id,
-    required this.name,
-    required this.isMale,
-    required this.gpa,
+    this.name,
+    this.gpa,
+    this.isMale = true,
   });
-  factory Student.adam(bool x) {
-    if (x) {
-      return Student(gpa: 99.4, isMale: true, name: "adam", id: 1);
-    } else {
-      return Student.fromMap({});
-    }
-  }
   Student.fromMap(Map map) {
     id = map['id'];
     name = map['name'];
-    isMale = map['isMale'] == 1 ? true : false;
     gpa = map['gpa'];
+    isMale = map['isMale'] == 1 ? true : false;
+    
+   
   }
   toMap() {
-    return {"name": name, "isMale": isMale ?? true ? 1 : 0, "gpa": gpa};
+    return {"name": name, "isMale": isMale ? 1 : 0, "gpa": gpa};
   }
 }

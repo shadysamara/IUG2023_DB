@@ -4,45 +4,38 @@ import 'package:iug_local_storage/mvc/models/student.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  DbHelper._();
-  static DbHelper dbHelper = DbHelper._();
+  static DbHelper dbHelper = DbHelper();
   late Database database;
-  initDatabase() async {
-    String appPath = await getDatabasesPath();
-    String dbPath = appPath + '/flutter_course.db';
-    database = await openDatabase(dbPath, version: 2, onCreate: (db, v) {
+  initDb() async {
+    String dirPath = await getDatabasesPath();
+    String dbPath = dirPath + "/iug_flutter.db";
+    database = await openDatabase(dbPath, version: 1, onCreate: (db, v) {
       db.execute(
           'CREATE TABLE students (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, isMale INTEGER, gpa REAL)');
     });
   }
 
-  insertNewStudent(Student student) async {
+  Future<bool> insertNewStudent(Student student) async {
     try {
-      int rowNumber = await database.insert('students', student.toMap());
-      log(rowNumber.toString());
-    } catch (e) {
-      log("row has not been inserted");
+      int rowId = await database.insert('students', student.toMap());
+      log(rowId.toString());
+      return true;
+    } on Exception catch (e) {
+      return false;
     }
   }
 
-  Future<List<Student>> getAllStudents() async {
-    await Future.delayed(const Duration(seconds: 3));
+  Future<List<Student>> getAllStudent() async {
     List<Map> results = await database.query('students');
-    List<Student> students = results.map((e) => Student.fromMap(e)).toList();
-    return students;
+    return results.map((e) => Student.fromMap(e)).toList();
   }
 
-  Future<Student> getStudentById(int id) async {
-    List<Map> results = await database.query('students', where: 'id=$id');
-    return Student.fromMap(results.first);
-  }
-
-  deleteStudent(int id) async {
+  deleteStuent(int id) async {
     await database.delete('students', where: 'id=$id');
   }
 
   updateStudent(Student student) async {
-    await database.update('students', student.toMap(),
-        where: 'id=${student.id}');
+    
+    await database.update('students', student.toMap(),where: 'id=?',whereArgs: [student.id]);
   }
 }
