@@ -27,15 +27,15 @@ class DbHelper {
 
   Future<List<Student>> getAllStudent() async {
     List<Map> results = await database.query('students');
-    return results.map((e) => Student.fromMap(e)).toList();
+    List<Student> students = results.map((e) => Student.fromMap(e)).toList();
+    return students;
   }
 
   deleteStuent(int id) async {
-    await database.delete('students', where: 'id=$id');
+    database.delete('students', where: 'id=$id');
   }
 
-  updateStudent(Student student) async {
-    
-    await database.update('students', student.toMap(),where: 'id=?',whereArgs: [student.id]);
+  updateStudent(Student newStudent) async {
+    database.update('students', newStudent.toMap(), where: 'id=${newStudent.id}');
   }
 }

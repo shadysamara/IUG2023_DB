@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iug_local_storage/mvc/models/db_helper.dart';
 import 'package:iug_local_storage/mvc/models/student.dart';
-import 'package:iug_local_storage/mvc/views/new_student.dart';
 
 class StudentsScreen extends StatefulWidget {
   @override
@@ -9,70 +8,45 @@ class StudentsScreen extends StatefulWidget {
 }
 
 class _StudentsScreenState extends State<StudentsScreen> {
-  List<Student>? students;
-  getAllStudents() async {
-    students = await DbHelper.dbHelper.getAllStudent();
-    setState(() {});
-  }
-
+  List<Student>? allstudents;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getAllStudents();
+    getStudentsFromDb();
+  }
+
+  getStudentsFromDb() async {
+    await Future.delayed(Duration(seconds: 3));
+    allstudents = await DbHelper.dbHelper.getAllStudent();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return NewStudent(getAllStudents);
-          }));
-        },
-        child: Icon(Icons.add),
-      ),
       appBar: AppBar(
-        title: Text("Students Page"),
+        title: Text("New Students Screen"),
       ),
-      body: ListView.builder(
-          itemCount: students?.length ?? 0,
-          itemBuilder: (context, index) {
-            return Dismissible(
-              secondaryBackground: Container(
-                color: Colors.green,
-                child: Center(child:Text("Update"))),
-              background: Container(
-                color: Colors.red,
-                child: Center(child:Text("Delete"))),
-              onDismissed: (direction) {
-             
-                  DbHelper.dbHelper.deleteStuent(students![index].id!);
-             
-              },
-              key: ObjectKey(students![index]),
-              child: Container(
-                margin: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    color: students![index].isMale
-                        ? Colors.blue
-                        : Colors.pinkAccent,
-                    borderRadius: BorderRadius.circular(15)),
-                child: ListTile(
-                  leading: IconButton(onPressed: (){
-                     Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return NewStudent(getAllStudents, students![index]);
-                        })); 
-                  }, icon: Icon(Icons.edit)),
-                  title: Text(students?[index].name ?? ''),
-                  subtitle: Text(students?[index].gpa.toString() ?? ''),
-                ),
-              ),
-            );
-          }),
+      body: allstudents == null
+          ? SizedBox()
+          : ListView.builder(
+              itemCount: allstudents!.length,
+              itemBuilder: (context, index) {
+                return StudentWidget(allstudents![index]);
+              }),
+    );
+  }
+}
+
+class StudentWidget extends StatelessWidget {
+  Student student;
+  StudentWidget(this.student);
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(student.name!),
+      subtitle: Text(student.gpa!.toString()),
     );
   }
 }
