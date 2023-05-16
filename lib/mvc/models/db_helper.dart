@@ -18,7 +18,6 @@ class DbHelper {
   Future<bool> insertNewStudent(Student student) async {
     try {
       int rowId = await database.insert('students', student.toMap());
-      log(rowId.toString());
       return true;
     } on Exception catch (e) {
       return false;
@@ -26,16 +25,26 @@ class DbHelper {
   }
 
   Future<List<Student>> getAllStudent() async {
-    List<Map> results = await database.query('students');
+    List<Map<String, dynamic>> results = await database.query('students');
     List<Student> students = results.map((e) => Student.fromMap(e)).toList();
     return students;
   }
 
+  Future<Student?> getOneStudent(int id) async {
+    List<Map<String, dynamic>> results =
+        await database.query('students', where: "id=?", whereArgs: [id]);
+    if (results.length != 0) {
+      Student student = Student.fromMap(results.first);
+      return student;
+    }
+  }
+
   deleteStuent(int id) async {
-    database.delete('students', where: 'id=$id');
+    database.delete("students", where: "id=$id");
   }
 
   updateStudent(Student newStudent) async {
-    database.update('students', newStudent.toMap(), where: 'id=${newStudent.id}');
+    database.update("students", newStudent.toMap(),
+        where: "id=?", whereArgs: [newStudent.id]);
   }
 }

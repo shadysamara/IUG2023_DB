@@ -12,7 +12,8 @@ class Student {
     this.gpa,
     this.isMale = true,
   });
-  Student.fromMap(Map map) {
+  //named constructor
+  Student.fromMap(Map<String,dynamic> map) {
     id = map['id'];
     name = map['name'];
     gpa = map['gpa'];

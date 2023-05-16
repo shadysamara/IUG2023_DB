@@ -1,15 +1,22 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:iug_local_storage/mvc/controller/iug_provider.dart';
+import 'package:iug_local_storage/mvc/models/api_helper.dart';
 import 'package:iug_local_storage/mvc/models/db_helper.dart';
 import 'package:iug_local_storage/mvc/models/student.dart';
+import 'package:iug_local_storage/mvc/views/provider_test.dart';
 import 'package:iug_local_storage/mvc/views/students_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await ApiHelper.apiHelper.initApi();
   await DbHelper.dbHelper.initDb();
-  runApp(MaterialApp(home: StudentsScreen()));
+  runApp(ChangeNotifierProvider<IugProvider>(
+      create: (context) {
+        return IugProvider(); // create the object
+      },
+      child: MaterialApp(home: ProviderTestScreen())));
 }
 
 class SpTestScreen extends StatefulWidget {
