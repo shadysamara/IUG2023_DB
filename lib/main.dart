@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:iug_local_storage/mvc/controller/db_provider.dart';
 import 'package:iug_local_storage/mvc/controller/iug_provider.dart';
 import 'package:iug_local_storage/mvc/models/api_helper.dart';
 import 'package:iug_local_storage/mvc/models/db_helper.dart';
@@ -12,11 +13,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiHelper.apiHelper.initApi();
   await DbHelper.dbHelper.initDb();
-  runApp(ChangeNotifierProvider<IugProvider>(
-      create: (context) {
-        return IugProvider(); // create the object
-      },
-      child: MaterialApp(home: ProviderTestScreen())));
+  runApp(ChangeNotifierProvider<DbProvider>(
+    create: (context)=>DbProvider(),
+    child: MyApp()));
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+   
+    // TODO: implement build
+    return MaterialApp(
+       
+        home: StudentsScreen());
+  }
 }
 
 class SpTestScreen extends StatefulWidget {
